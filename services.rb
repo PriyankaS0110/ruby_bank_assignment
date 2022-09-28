@@ -13,8 +13,8 @@ while task != "3"
 
   when "1"
     puts "Creating Account..."
-    account1 = Customer.new()
-    account1.create_account
+    Customer.get_account_data
+    
 
   when "2"
     puts "Enter your Credentials..."
@@ -22,7 +22,7 @@ while task != "3"
     customer_mail_login = gets.chomp
     puts "Enter Password"
     customer_password_login = gets.chomp
-    Customer.new.log_in(customer_mail_login, customer_password_login)
+    Customer.log_in(customer_mail_login, customer_password_login)
     
   when "3"
       puts "Bye Have a nice day..."
