@@ -18,11 +18,11 @@ while task != "3"
 
   when "2"
     puts "Enter your Credentials..."
-    puts "Enter Mail ID"
-    customer_mail_login = gets.chomp
+    puts "Enter Customer ID"
+    customer_id_login = gets.chomp
     puts "Enter Password"
     customer_password_login = gets.chomp
-    Customer.log_in(customer_mail_login, customer_password_login)
+    Customer.log_in(customer_id_login, customer_password_login)
     
   when "3"
       puts "Bye Have a nice day..."

@@ -1,5 +1,7 @@
 require_relative '../Bank/validetion.rb'
 require_relative '../Bank/account.rb'
+require_relative '../Bank/transaction.rb'
+
 
 class Customer 
 
@@ -26,31 +28,25 @@ class Customer
 
   def self.retiever_acc_data(id)
     @@account_list[id]
+    # p  @@account_list[id]
   end
 
-  def self.retiever_all_acc_keys
-    @@account_list.keys
-    # p @@account_list.keys
+  def self.retiever_whole_hash #not in use
+    @@account_list
+    # p @@account_list
   end
 
-  # def self.retiever_all_acc_each_keys
-  #   @@account_list.each_key
-  #   p @@account_list.each_key
-  # end
-
-  def self.log_in(customer_mail_login, customer_password_login)
-      all = Customer.retiever_acc_data("1")
-    
-      if customer_mail_login == all.customer_mail.has_value?("1") && customer_password_login ==  all.customer_password.has_value?("1")
-        # @@login_with_cust_id = 
+  def self.log_in(customer_id_login, customer_password_login)
+    cust = Customer.retiever_acc_data(customer_id_login)
+      if customer_password_login == cust.customer_password
         @@status = 1 
+        $login_with_id = customer_id_login
+        p "Login successful"
         Account.profile
       else
         p "Try again"
       end
- 
   end
-
 
   def self.get_account_data 
  
@@ -100,26 +96,51 @@ class Customer
     puts "Enter the Amount you want to Deposit: "
     cust.balance += amount
     p "your balance after deposit #{cust.balance}"
-    # passbook = Transaction.new( 1 ,"deposit", "today" )
     p "Deposit money sucessfully"
+
+    passbook_entry = Transaction.new("1", current_id, "Deposit", amount, "time", "na")
+    Passbook.add_entry(passbook_entry)
   end
 
-    def self.withdraw_balance(current_id, amount)
-      cust = Customer.retiever_acc_data(current_id)
-      puts "Enter the Amount you want to withdraw: "
-      if amount <= cust.balance
-        cust.balance -= amount
-        p "your balance after withdraw #{ cust.balance}"
-        if  cust.balance < 1000
-          p "Note: Your account has to have minimun Rs. 1000.00"
-        end
-        p "withdraw money sucessfully"
-        # Transaction.transactions
-      else
-        p "you have insufficient balance"
+  def self.withdraw_balance(current_id, amount)
+    cust = Customer.retiever_acc_data(current_id)
+    puts "Enter the Amount you want to withdraw: "
+    if amount <= cust.balance
+      cust.balance -= amount
+      p "your balance after withdraw #{ cust.balance}"
+      if  cust.balance < 1000
+        p "Note: Your account has to have minimun Rs. 1000.00"
       end
+      p "withdraw money sucessfully"
+      passbook_entry = Transaction.new("2", current_id, "Withdraw", amount, "time", "na")
+      Passbook.add_entry(passbook_entry)
+      
+    else
+      p "sorry you have insufficient balance"
+    end
   end
 
+  def self.transfer_balance(current_id, amount, receiver_cust_id)
+    sender_cust = Customer.retiever_acc_data(current_id)
+    # p sender_cust
+    receiver_cust = Customer.retiever_acc_data(receiver_cust_id)
+    # p receiver_cust
+    if sender_cust.balance >= amount
+      sender_cust.balance -= amount
+      receiver_cust.balance += amount
+      p "transfer money sucessfully"
+      passbook_entry = Transaction.new("3", current_id, "Transfer", amount, "time", receiver_cust_id)
+      Passbook.add_entry(passbook_entry)
+    else
+      p "sorry you have insufficient balance"
+    end
+  end
+
+  def self.passbook(current_id)
+    all = Passbook.retiever_entry(current_id)
+    p all
+  
+  end 
 
   def log_out
     @@status = 0 

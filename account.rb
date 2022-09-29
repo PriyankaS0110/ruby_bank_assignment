@@ -22,27 +22,29 @@ class Account
         case action
           when "1"  
             puts "Check Balance..."
-            Customer.account_balance("1")     #id is stitically 1 need to make it dainamic
+            Customer.account_balance($login_with_id )   
 
           when "2"  
-            puts "Deposit..."  
+            puts "Deposit...Enter Amount"  
             amount = gets.chomp.to_i
-            Customer.deposit_balance("1", amount)
+            Customer.deposit_balance($login_with_id, amount)
 
           when "3"   
-            puts "Withdraw..." 
+            puts "Withdraw...Enter Amount" 
             amount = gets.chomp.to_i
-            Customer.withdraw_balance("1", amount)
+            Customer.withdraw_balance($login_with_id, amount)
             
           when "4"  
-            puts "Transfer Money..."
-            Account.transfer_balance
+            puts "Transfer Money...Enter Amount"
+            amount = gets.chomp.to_i
+            puts "Enter receiver's customer id"
+            receiver_cust_id = gets.chomp
+            Customer.transfer_balance($login_with_id, amount, receiver_cust_id)
             
           when "5"   
             puts "Open Passbook..." 
-            passbookbal = Account.new
-            passbookbal.passbook
-
+            Customer.passbook($login_with_id)
+        
           when "6"   
             puts "Logout..." 
 
@@ -65,47 +67,3 @@ class Account
 
 end
 
-
-
-# class Account
-
-#   def initialize(amount)
-#     @a = amount
-#   end
-
-
-
-#   def deposit_balance
-#     puts "Enter the Amount you want to Deposit: "
-#     @@balance += @a
-#     p "your balance after deposit #{@@balance}"
-#     # passbook = Transaction.new( 1 ,"deposit", "today" )
-#     p "Deposit money sucessfully"
-
-#   end
-
-#   def withdraw_balance
-#     puts "Enter the Amount you want to withdraw: "
-#     if @a <= @@balance
-#       @@balance -= @a
-#       p "your balance after withdraw #{@@balance}"
-#       if @@balance < 1000
-#         p "Note: Your account has to have minimun Rs. 1000.00"
-#       end
-#       p "withdraw money sucessfully"
-#       # Transaction.transactions
-#     else
-#       p "you have insufficient balance"
-#     end
-#   end
-
-#   def transfer_balance
-#     p "transfer money sucessfully"
-#     # Transaction.transactions
-#   end
-
-#   def passbook
-#     Transaction.new.transactions
-#   end
-  
-# end
